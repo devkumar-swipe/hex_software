@@ -1,1 +1,6 @@
+SpeechRecognition
+pyttsx3
+pyaudio
 
+
+<h1> install these before starting the eek voice assistant</h1>
