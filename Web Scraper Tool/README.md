@@ -27,7 +27,7 @@ This project is a **Web Scraper Tool** built with Python and PyQt5. It allows us
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/your-username/web-scraper-tool.git
+    git clone https://github.com/devkumar-swipe/hex_software/web-scraper-tool.git
     cd web-scraper-tool
     ```
 
