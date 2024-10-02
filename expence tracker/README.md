@@ -20,7 +20,7 @@ This is a simple **Expense Tracker** application built using Python and PyQt5. T
 1. **Clone the repository**:
     ```bash
     git clone https://github.com/devkumar-swipe/hex_software/expense_tracker.git
-    cd expense-tracker
+    cd expense_tracker
     ```
 
 2. **Install the required dependencies**:
