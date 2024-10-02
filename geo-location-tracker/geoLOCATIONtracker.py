@@ -1,6 +1,8 @@
 import sys
 import phonenumbers
+from phonenumbers import geocoder, carrier  # Import geocoder and carrier separately
 import folium
+import webbrowser
 from opencage.geocoder import OpenCageGeocode
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
 from PyQt5.QtCore import Qt
@@ -54,13 +56,17 @@ class GeolocationTracker(QWidget):
         # Step 1: Parse phone number and get location
         try:
             pepnumber = phonenumbers.parse(full_number)
-            location = phonenumbers.geocoder.description_for_number(pepnumber, "en")
-            carrier_name = phonenumbers.carrier.name_for_number(pepnumber, "en")
-            
+            location = geocoder.description_for_number(pepnumber, "en")  # Use geocoder from phonenumbers
+            carrier_name = carrier.name_for_number(pepnumber, "en") or "Unknown"
+
+            if not location:
+                QMessageBox.warning(self, 'Geolocation Error', 'Could not retrieve location for this phone number.')
+                return
+
             # Step 2: Use OpenCage to get coordinates for the location
-            geocoder = OpenCageGeocode(api_key)
+            opencage_geocoder = OpenCageGeocode(api_key)  # Rename to avoid conflict
             query = str(location)
-            result = geocoder.geocode(query)
+            result = opencage_geocoder.geocode(query)
             
             if result:
                 lat = result[0]['geometry']['lat']
@@ -74,7 +80,11 @@ class GeolocationTracker(QWidget):
                 map_file = "geolocation_map.html"
                 my_map.save(map_file)
                 
+                # Prompt user to open the map
                 QMessageBox.information(self, 'Geolocation Result', f"Location: {location}\nCarrier: {carrier_name}\nMap saved as '{map_file}'")
+                
+                # Optionally open the saved map in a browser
+                webbrowser.open(map_file)
             else:
                 QMessageBox.warning(self, 'Geolocation Error', 'Could not retrieve geolocation data.')
         except phonenumbers.NumberParseException as e:
